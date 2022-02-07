@@ -86,19 +86,25 @@ public class PasswordEntryDialog extends AppCompatDialog
             passwordInput.addTextChangedListener(this);
 
             passwordInput.setOnEditorActionListener(this);
+
+            // Length validation is disabled on ENTER mode
+            tooShortWarning.setVisibility(View.GONE);
+            okButton.setEnabled(true);
         }
     }
 
     // TextWatcher
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-        if (passwordInput.getEditableText().length() >= Constants.AUTH_MIN_PASSWORD_LENGTH) {
-            tooShortWarning.setVisibility(View.GONE);
+        if (dialogMode == Mode.UPDATE) {
+            if (passwordInput.getEditableText().length() >= Constants.AUTH_MIN_PASSWORD_LENGTH) {
+                tooShortWarning.setVisibility(View.GONE);
 
-            okButton.setEnabled(dialogMode == Mode.ENTER || TextUtils.equals(passwordInput.getEditableText(), passwordConfirm.getEditableText()));
-        }
-        else {
-            tooShortWarning.setVisibility(View.VISIBLE);
-            okButton.setEnabled(false);
+                okButton.setEnabled(dialogMode == Mode.ENTER || TextUtils.equals(passwordInput.getEditableText(), passwordConfirm.getEditableText()));
+            }
+            else {
+                tooShortWarning.setVisibility(View.VISIBLE);
+                okButton.setEnabled(false);
+            }
         }
     }
 
